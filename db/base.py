@@ -1,20 +1,11 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import DeclarativeBase, sessionmaker
+from sqlmodel import SQLModel, Session, create_engine
 
 from core.config import settings
 
 db_url = settings.DATABASE_URL.replace("postgresql://", "postgresql+psycopg://", 1)
 engine = create_engine(db_url)
-SessionLocal = sessionmaker(bind=engine)
-
-
-class Base(DeclarativeBase):
-    pass
 
 
 def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+    with Session(engine) as session:
+        yield session
