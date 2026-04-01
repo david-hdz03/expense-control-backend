@@ -20,3 +20,17 @@ class VerificationCode(SQLModel, table=True):
         default_factory=lambda: datetime.now() + timedelta(minutes=15)
     )
     used_at: datetime | None = Field(default=None, nullable=True)
+
+
+class PasswordResetCode(SQLModel, table=True):
+    __tablename__ = "password_reset_codes"
+    id: int = Field(default=None, primary_key=True, index=True)
+    code: str
+    user_id: int = Field(foreign_key="users.id")
+    user: "User" = Relationship()
+    created_at: datetime = Field(default=datetime.now)
+    updated_at: datetime = Field(default=datetime.now)
+    used_at: datetime | None = Field(default=None, nullable=True)
+    expired_at: datetime = Field(
+        default_factory=lambda: datetime.now() + timedelta(minutes=60)
+    )
