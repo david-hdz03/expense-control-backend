@@ -1,3 +1,6 @@
+from datetime import datetime
+from typing import Optional
+
 from pydantic import BaseModel
 
 
@@ -11,15 +14,13 @@ class UserCreate(UserBase):
     age: int
     currency_code: str
     name: str
-    second_name: str
+    second_name: Optional[str] = None
     paternal_last_name: str
     maternal_last_name: str
-    created_at: str
-    updated_at: str
 
 
 class UserLogin(UserBase):
-    last_login: str
+    last_login: datetime
 
 
 class UserDisable(UserBase):

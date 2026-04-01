@@ -1,25 +1,16 @@
 from fastapi import FastAPI
-from sqladmin import Admin, ModelView
+from sqladmin import Admin
 from sqlalchemy import text
 
+from core.admin import setup_admin
 from core.config import settings
 from db.base import engine
-from modules.users.models import User
 from modules.users.router import router as users_router
 
-#
 app = FastAPI(title=settings.PROJECT_NAME)
 
 admin = Admin(app, engine)
-
-
-class UserAdmin(ModelView, model=User):
-    column_list = [User.id, User.email, User.is_active]
-    column_searchable_list = [User.email]
-    icon = "fa-solid fa-user"
-
-
-admin.add_view(UserAdmin)
+setup_admin(admin)
 
 
 @app.get("/")
