@@ -4,7 +4,7 @@ from sqlmodel import Field, Relationship, SQLModel
 
 
 class UserType(SQLModel, table=True):
-    __tablename__ = "usertypes"
+    __tablename__ = "user_types"
     id: int = Field(default=None, primary_key=True, index=True)
     name: str
 
@@ -22,9 +22,10 @@ class User(SQLModel, table=True):
     currency_code: str
     is_verified: bool = Field(default=False)
     auth_provider: str = Field(default="email")
+    provider_user_id: int | None = Field(default=None, nullable=True)
     is_active: bool = Field(default=True)
-    last_login: datetime = Field(default=None, nullable=True)
-    user_type_id: int | None = Field(default=2, foreign_key="usertypes.id")
+    last_login: datetime | None = Field(default=None, nullable=True)
+    user_type_id: int | None = Field(default=2, foreign_key="user_types.id")
     user_type: UserType | None = Relationship()
     created_at: datetime = Field(default=datetime.now)
     updated_at: datetime = Field(default=datetime.now)
