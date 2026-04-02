@@ -5,7 +5,7 @@ from sqlmodel import Field, Relationship, SQLModel
 from modules.users.models import User
 
 
-class Categories(SQLModel, table=True):
+class Category(SQLModel, table=True):
     __tablename__ = "categories"
     id: int = Field(default=None, primary_key=True, index=True)
     name: str
