@@ -1,5 +1,6 @@
 from logging.config import fileConfig
 
+<<<<<<< HEAD
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
@@ -42,6 +43,32 @@ def run_migrations_offline() -> None:
     script output.
 
     """
+=======
+from sqlalchemy import engine_from_config, pool
+
+from alembic import context
+from core.config import settings
+from db.all_models import (
+    SQLModel,  # noqa: F401 — importa all_models para registrar los modelos
+)
+
+config = context.config
+
+section = config.config_ini_section
+config.set_section_option(
+    section,
+    "sqlalchemy.url",
+    settings.DATABASE_URL.replace("postgresql://", "postgresql+psycopg://", 1),
+)
+
+if config.config_file_name is not None:
+    fileConfig(config.config_file_name)
+
+target_metadata = SQLModel.metadata
+
+
+def run_migrations_offline() -> None:
+>>>>>>> 72a6b47fbe6208f95054d664927bf93918082bae
     url = config.get_main_option("sqlalchemy.url")
     context.configure(
         url=url,
@@ -49,18 +76,24 @@ def run_migrations_offline() -> None:
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
     )
+<<<<<<< HEAD
 
+=======
+>>>>>>> 72a6b47fbe6208f95054d664927bf93918082bae
     with context.begin_transaction():
         context.run_migrations()
 
 
 def run_migrations_online() -> None:
+<<<<<<< HEAD
     """Run migrations in 'online' mode.
 
     In this scenario we need to create an Engine
     and associate a connection with the context.
 
     """
+=======
+>>>>>>> 72a6b47fbe6208f95054d664927bf93918082bae
     connectable = engine_from_config(
         config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",
@@ -68,10 +101,14 @@ def run_migrations_online() -> None:
     )
 
     with connectable.connect() as connection:
+<<<<<<< HEAD
         context.configure(
             connection=connection, target_metadata=target_metadata
         )
 
+=======
+        context.configure(connection=connection, target_metadata=target_metadata)
+>>>>>>> 72a6b47fbe6208f95054d664927bf93918082bae
         with context.begin_transaction():
             context.run_migrations()
 

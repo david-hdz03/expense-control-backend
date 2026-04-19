@@ -1,10 +1,14 @@
 {
   "permissions": {
     "allow": [
+<<<<<<< HEAD
       "Bash(python -c \"with open\\('requirements.txt', 'rb'\\) as f: print\\(repr\\(f.read\\(\\)[:500]\\)\\)\")",
       "Bash(python -c ':*)",
       "Bash(python)",
       "Bash(ls -lah *.md)"
+=======
+      "Bash(cd:*)"
+>>>>>>> 72a6b47fbe6208f95054d664927bf93918082bae
     ]
   }
 }
