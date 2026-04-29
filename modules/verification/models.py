@@ -14,8 +14,8 @@ class VerificationCode(SQLModel, table=True):
     attemp_count: int = Field(default=0)
     resended_count: int = Field(default=0)
     is_active: bool = Field(default=True)
-    created_at: datetime = Field(default=datetime.now)
-    updated_at: datetime = Field(default=datetime.now)
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
     expired_at: datetime = Field(
         default_factory=lambda: datetime.now() + timedelta(minutes=15)
     )
@@ -28,8 +28,8 @@ class PasswordResetCode(SQLModel, table=True):
     code: str
     user_id: int = Field(foreign_key="users.id")
     user: "User" = Relationship()
-    created_at: datetime = Field(default=datetime.now)
-    updated_at: datetime = Field(default=datetime.now)
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
     used_at: datetime | None = Field(default=None, nullable=True)
     expired_at: datetime = Field(
         default_factory=lambda: datetime.now() + timedelta(minutes=60)

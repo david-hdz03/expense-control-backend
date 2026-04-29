@@ -16,8 +16,8 @@ class Transaction(SQLModel, table=True):
     user: User = Relationship()
     category_id: int = Field(default=None, foreign_key="categories.id")
     category: Category = Relationship()
-    created_at: datetime = Field(default=datetime.now())
-    updated_at: datetime = Field(default=datetime.now())
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
     deleted_at: datetime | None = Field(default=None, nullable=True)
 
 
@@ -34,7 +34,7 @@ class TransactionType(SQLModel, table=True):
     id: int = Field(primary_key=True)
     name: str
     disabled: bool = Field(default=False)
-    created_at: datetime = Field(default=datetime.now())
-    updated_at: datetime = Field(default=datetime.now())
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
 
     categories: list["Category"] = Relationship(link_model=TransactionTypeCategory)

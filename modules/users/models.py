@@ -27,5 +27,5 @@ class User(SQLModel, table=True):
     last_login: datetime | None = Field(default=None, nullable=True)
     user_type_id: int | None = Field(default=2, foreign_key="user_types.id")
     user_type: UserType | None = Relationship()
-    created_at: datetime = Field(default=datetime.now)
-    updated_at: datetime = Field(default=datetime.now)
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)

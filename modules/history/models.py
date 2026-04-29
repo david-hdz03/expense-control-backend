@@ -11,5 +11,5 @@ class TransactionChange(SQLModel, table=True):
     user_id: int = Field(foreign_key="users.id")
     user: "User" = Relationship()
     action: str
-    created_at: datetime = Field(default=datetime.now, allow_mutation=False)
-    updated_at: datetime = Field(default=datetime.now, allow_mutation=False)
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)

@@ -2,7 +2,7 @@ from sqlmodel import SQLModel, Session, create_engine
 
 from core.config import settings
 
-db_url = settings.DATABASE_URL.replace("postgresql://", "postgresql+psycopg://", 1)
+db_url = settings.DATABASE_URL.replace("postgresql://", "postgresql+psycopg2://", 1)
 engine = create_engine(db_url)
 
 
