@@ -21,6 +21,7 @@ class TransactionBase(BaseModel):
     amount: int
     transaction_type_id: int
     category_id: int | None = None
+    transaction_date: datetime | None = None
 
 
 class TransactionCreate(TransactionBase):
@@ -31,6 +32,7 @@ class TransactionUpdate(BaseModel):
     amount: int | None = None
     transaction_type_id: int | None = None
     category_id: int | None = None
+    transaction_date: datetime | None = None
 
 
 class TransactionRead(BaseModel):
@@ -41,5 +43,6 @@ class TransactionRead(BaseModel):
     transaction_type: TransactionTypeRead
     category: CategoryRead | None
     user_id: int
+    transaction_date: datetime
     created_at: datetime
     updated_at: datetime

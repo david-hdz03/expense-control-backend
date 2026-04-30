@@ -64,7 +64,7 @@ def get_transactions(
     transaction_type_id: int | None = None,
     category_id: int | None = None,
 ) -> list[Transaction]:
-    query = _base_query(user_id).order_by(Transaction.created_at.desc())
+    query = _base_query(user_id).order_by(Transaction.transaction_date.desc())
     if transaction_type_id is not None:
         query = query.where(Transaction.transaction_type_id == transaction_type_id)
     if category_id is not None:
@@ -79,7 +79,10 @@ def get_transaction(db: Session, tx_id: int, user_id: int) -> Transaction | None
 
 
 def create_transaction(db: Session, user_id: int, payload: TransactionCreate) -> Transaction:
-    tx = Transaction(**payload.model_dump(), user_id=user_id)
+    data = payload.model_dump()
+    if data.get('transaction_date') is None:
+        data['transaction_date'] = datetime.now()
+    tx = Transaction(**data, user_id=user_id)
     db.add(tx)
     db.commit()
     db.refresh(tx)

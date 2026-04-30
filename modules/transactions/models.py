@@ -16,6 +16,7 @@ class Transaction(SQLModel, table=True):
     user: User = Relationship()
     category_id: int = Field(default=None, foreign_key="categories.id")
     category: Category = Relationship()
+    transaction_date: datetime = Field(default_factory=datetime.now)
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: datetime = Field(default_factory=datetime.now)
     deleted_at: datetime | None = Field(default=None, nullable=True)
