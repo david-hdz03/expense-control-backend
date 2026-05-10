@@ -60,3 +60,18 @@ class UserRead(BaseModel):
     is_active: bool
     currency_code: str
     created_at: datetime
+
+
+class GoogleAuthRequest(BaseModel):
+    id_token: str | None = None
+    access_token: str | None = None
+    platform: Literal["web", "android", "ios"] = "web"
+
+    @field_validator("id_token", mode="before")
+    @classmethod
+    def _require_at_least_one(cls, v: str | None) -> str | None:
+        return v
+
+    def model_post_init(self, __context: object) -> None:
+        if not self.id_token and not self.access_token:
+            raise ValueError("Either id_token or access_token is required")

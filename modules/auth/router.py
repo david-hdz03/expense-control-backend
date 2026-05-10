@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlmodel import Session
@@ -16,9 +18,10 @@ from modules.verification.schemas import (
 )
 
 from . import service
-from .schemas import RegisterResponse, RefreshRequest, Token, UserLogin, UserRead, UserRegister
+from .schemas import GoogleAuthRequest, RegisterResponse, RefreshRequest, Token, UserLogin, UserRead, UserRegister
 
 router = APIRouter(prefix="/auth", tags=["auth"])
+logger = logging.getLogger(__name__)
 
 _UNAUTHORIZED = {"WWW-Authenticate": "Bearer"}
 
@@ -32,7 +35,7 @@ def register(payload: UserRegister, db: Session = Depends(get_db)) -> RegisterRe
     except service.VerificationEmailDeliveryError:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="User created but verification email could not be sent. Request a new code",
+            detail="No pudimos enviarte el código de verificación. Tu cuenta fue creada — intenta de nuevo en unos minutos con 'Reenviar código'.",
         )
     return RegisterResponse(
         detail="User registered. Verify your email before login",
@@ -163,3 +166,15 @@ def reset_password(
             detail="Invalid reset code",
         )
     return PasswordResetConfirmResponse(detail="Password reset successfully")
+
+
+@router.post("/google", response_model=Token)
+def google_auth(payload: GoogleAuthRequest, db: Session = Depends(get_db)) -> Token:
+    try:
+        return service.google_authenticate(db, payload.id_token, payload.access_token)
+    except service.GoogleTokenError as exc:
+        logger.warning("Google auth failed: %s", exc)
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="No se pudo autenticar con Google",
+        )

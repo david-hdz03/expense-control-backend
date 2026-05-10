@@ -33,7 +33,7 @@ def request_verification_code(
     except service.VerificationEmailDeliveryError:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Verification code generated but email could not be sent",
+            detail="No pudimos enviar el correo de verificación. Inténtalo de nuevo en unos minutos.",
         )
 
     return VerificationRequestResponse(

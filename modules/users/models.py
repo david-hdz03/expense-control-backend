@@ -12,13 +12,13 @@ class UserType(SQLModel, table=True):
 
 class User(SQLModel, table=True):
     __tablename__ = "users"
-    id: int = Field(default=None, primary_key=True, index=True)
+    id: Optional[int] = Field(default=None, primary_key=True, index=True)
     name: str
     second_name: str = Field(default="")
     paternal_last_name: str
     maternal_last_name: str = Field(default="")
     email: str = Field(unique=True, index=True)
-    password: str
+    password: str | None = Field(default=None, nullable=True)
     age: int
     currency_code: str
     is_verified: bool = Field(default=False)

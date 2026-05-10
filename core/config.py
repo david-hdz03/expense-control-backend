@@ -17,6 +17,9 @@ class Settings(BaseSettings):
     SMTP_PASSWORD: str = ""
     SMTP_FROM_EMAIL: str = ""
     SMTP_FROM_NAME: str = "Expense Control"
+    GOOGLE_CLIENT_ID_WEB: str = ""
+    GOOGLE_CLIENT_ID_ANDROID: str = ""
+    GOOGLE_CLIENT_ID_IOS: str = ""
 
     model_config = SettingsConfigDict(
         env_file=".env",
@@ -27,6 +30,14 @@ class Settings(BaseSettings):
     @property
     def cors_origins_list(self) -> list[str]:
         return [o.strip() for o in self.CORS_ORIGINS.split(",") if o.strip()]
+
+    @property
+    def google_allowed_client_ids(self) -> list[str]:
+        return [c for c in [
+            self.GOOGLE_CLIENT_ID_WEB,
+            self.GOOGLE_CLIENT_ID_ANDROID,
+            self.GOOGLE_CLIENT_ID_IOS,
+        ] if c]
 
     @model_validator(mode="after")
     def validate_email_settings(self) -> "Settings":
